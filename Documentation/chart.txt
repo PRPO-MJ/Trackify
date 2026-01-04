@@ -1,0 +1,58 @@
+flowchart TB
+  %% ===== Top (Clients) =====
+  subgraph CLIENTS[Uporabniki & vmesniki]
+    UI[Web UI  Nadzorna plošča]
+    MCP[MCP Agent (pogovor s strežnikom)]
+  end
+
+  %% ===== API Gateway Layer =====
+  GW[API Gateway]
+
+  UI -- GW
+  MCP -- GW
+
+  %% ===== Microservices Layer =====
+  subgraph MS[Mikrostoritve]
+    DASH[Nadzorna ploščabr]
+    HOURS[Upravljanje urbr]
+    GOALS[Nastavitve ciljevbr]
+    AUTH[User Managementbr]
+    PDF[PDF Makerbr]
+    MAIL[Mailerbr]
+  end
+
+  %% ===== API Gateway - Services =====
+  GW --- DASH
+  GW --- HOURS
+  GW --- GOALS
+  GW --- AUTH
+  GW --- PDF
+  GW --- MAIL
+
+  %% ===== Service-to-Service (po opisu) =====
+  %% Nadzorna plošča bere cilje in ure
+  DASH -- GOALS
+  DASH -- HOURS
+  DASH -- AUTH
+
+  %% PDF Maker potrebuje cilje in podatke o uporabniku
+  PDF -- GOALS
+  PDF -- AUTH
+
+  HOURS -- AUTH
+
+  %% Mailer sproži generiranje PDF in potrebuje cilje + uporabnika
+  MAIL -- PDF
+  MAIL -- GOALS
+  MAIL -- AUTH
+
+  %% ===== Persistence (po trenutni skici) =====
+  DB[Database]
+  HOURS --- DB
+  GOALS --- DB
+  AUTH --- DB
+  %% (PDF in MAIL sta tipično stateless; če želiš shranjevati predloge v Mailerju, lahko MAIL --- DB)
+
+  %% ===== Notes =====
+  classDef faded fill#f9f9f9,stroke#bbb,color#555;
+  class MQ,OBS faded;
