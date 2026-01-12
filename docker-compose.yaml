@@ -1,0 +1,171 @@
+version: "3.8"
+
+services:
+
+  database:
+    image: postgres
+    container_name: database
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123!
+      POSTGRES_DB: trackify
+    volumes:
+      - pgdata:/var/lib/postgresql
+      - ./Database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - trackify-network
+
+  # Trackify UI
+  ui:
+    build:
+      context: ./UI/
+      args:
+        VITE_GOOGLE_CLIENT_ID: "105331836594-2fap6msaki659c87lqnurnqeah30925n.apps.googleusercontent.com"
+        VITE_USER_SERVICE_URL: "http://localhost:8006"
+        VITE_GOALS_SERVICE_URL: "http://localhost:8008"
+        VITE_ENTRIES_SERVICE_URL: "http://localhost:8009"
+        VITE_MAILER_SERVICE_URL: "http://localhost:8010"
+        VITE_PDF_SERVICE_URL: "http://localhost:8011"
+        VITE_APP_NAME: "Trackify"
+        VITE_APP_VERSION: "1.0.0"
+    container_name: trackify-ui
+    depends_on:
+      - user-service
+      - goals-service
+      - entries-service
+    ports:
+      - "3000:3000"
+    networks:
+      - trackify-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # User Service
+  user-service:
+    build: ./User-Service/
+    container_name: user-service
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - "8006:80"
+    networks:
+      - trackify-network
+    environment:
+      ENV: dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/api/users/health/liveness"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    
+  # Goals Service
+  goals-service:
+    build: ./Goals-Service/
+    container_name: goals-service
+    depends_on:
+      database:
+        condition: service_healthy
+      user-service:
+        condition: service_healthy
+    ports:
+      - "8008:80"
+    networks:
+      - trackify-network
+    environment:
+      ENV: dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/api/goals/health/liveness"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Entries Service
+  entries-service:
+    build: ./Entries-Service/
+    container_name: entries-service
+    depends_on:
+      database:
+        condition: service_healthy
+      goals-service:
+        condition: service_healthy
+    ports:
+      - "8009:80"
+    networks:
+      - trackify-network
+    environment:
+      ENV: dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/api/entries/health/liveness"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Mailer Service
+  mailer-service:
+    build: ./Mailer-Service/
+    container_name: mailer-service
+    depends_on:
+      database:
+        condition: service_healthy
+      pdf-service:
+        condition: service_healthy
+    ports:
+      - "8010:80"
+    networks:
+      - trackify-network
+    environment:
+      ENV: dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/api/mail/health/liveness"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PDF Service
+  pdf-service:
+    build: ./PDF-Service/
+    container_name: pdf-service
+    depends_on:
+      database:
+        condition: service_healthy
+      user-service:
+        condition: service_healthy
+      goals-service:
+        condition: service_healthy
+      entries-service:
+        condition: service_healthy
+    ports:
+      - "8011:80"
+    volumes:
+      - pdf-storage:/tmp/pdfs
+    networks:
+      - trackify-network
+    environment:
+      ENV: dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/api/pdf/health/liveness"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  
+
+networks:
+  trackify-network:
+    driver: bridge
+
+volumes:
+  pgdata:
+  pdf-storage:

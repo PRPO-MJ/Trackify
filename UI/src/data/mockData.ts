@@ -1,0 +1,85 @@
+import { Goal, User } from '@/types/goal';
+
+export const mockUser: User = {
+  id: '1',
+  name: 'Alex Johnson',
+  email: 'alex@example.com',
+  avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex',
+  timezone: 'America/New_York',
+  currency: 'USD',
+};
+
+export const mockGoals: Goal[] = [
+  {
+    id: '1',
+    name: 'Frontend Development Course',
+    description: 'Complete the advanced React and TypeScript course',
+    targetHours: 100,
+    completedHours: 67,
+    hourlyRate: 50,
+    currency: 'USD',
+    startDate: '2024-01-01',
+    endDate: '2024-06-30',
+    workEntries: [
+      { id: '1', date: '2024-01-15', hours: 3, description: 'React hooks deep dive' },
+      { id: '2', date: '2024-01-16', hours: 4, description: 'TypeScript generics' },
+      { id: '3', date: '2024-01-17', hours: 2.5, description: 'State management patterns' },
+    ],
+    emailSettings: {
+      enabled: true,
+      recipients: ['manager@company.com'],
+      subject: 'Weekly Progress Report - Frontend Course',
+      body: 'Here is my weekly progress update...',
+      frequency: 'weekly',
+    },
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-17',
+  },
+  {
+    id: '2',
+    name: 'Client Project Alpha',
+    description: 'Build dashboard for Client Alpha',
+    targetHours: 200,
+    completedHours: 45,
+    hourlyRate: 85,
+    currency: 'USD',
+    startDate: '2024-02-01',
+    endDate: '2024-08-31',
+    workEntries: [
+      { id: '1', date: '2024-02-10', hours: 8, description: 'Initial setup and architecture' },
+      { id: '2', date: '2024-02-11', hours: 6, description: 'Database schema design' },
+    ],
+    emailSettings: {
+      enabled: false,
+      recipients: [],
+      subject: '',
+      body: '',
+      frequency: 'weekly',
+    },
+    createdAt: '2024-02-01',
+    updatedAt: '2024-02-11',
+  },
+  {
+    id: '3',
+    name: 'Personal Blog Writing',
+    description: 'Write technical blog posts',
+    targetHours: 50,
+    completedHours: 50,
+    hourlyRate: 0,
+    currency: 'USD',
+    startDate: '2024-01-01',
+    endDate: '2024-03-31',
+    workEntries: [
+      { id: '1', date: '2024-01-20', hours: 5, description: 'Article: React Best Practices' },
+    ],
+    emailSettings: {
+      enabled: false,
+      recipients: [],
+      subject: '',
+      body: '',
+      frequency: 'monthly',
+    },
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-20',
+  },
+];

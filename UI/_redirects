@@ -1,0 +1,1 @@
+/api/*  https://your-k8s-loadbalancer-endpoint/:splat  200
