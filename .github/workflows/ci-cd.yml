@@ -36,7 +36,6 @@ jobs:
       - name: Create .env file
         working-directory: ./User-Service
         run: |
-          echo "ENV=prod" >> .env
           echo "DATABASE_URL=${{ secrets.DATABASE_URL_USER }}" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
           echo "ALGORITHM=${{ secrets.ALGORITHM }}" >> .env
@@ -44,12 +43,17 @@ jobs:
           echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
           echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
           echo "FRONTEND_URL=${{ secrets.FRONTEND_URL }}" >> .env
+          echo "GOALS_SERVICE_URL=${{ secrets.GOALS_SERVICE_URL }}" >> .env
+          echo "ENTRIES_SERVICE_URL=${{ secrets.ENTRIES_SERVICE_URL }}" >> .env
+          echo "MAILER_SERVICE_URL=${{ secrets.MAILER_SERVICE_URL }}" >> .env
+          echo "PDF_SERVICE_URL=${{ secrets.PDF_SERVICE_URL }}" >> .env
           echo "CORS_ORIGINS=${{ secrets.CORS_ORIGINS }}" >> .env
           echo "CORS_CREDENTIALS=${{ secrets.CORS_CREDENTIALS }}" >> .env
           echo "CORS_METHODS=${{ secrets.CORS_METHODS }}" >> .env
           echo "CORS_HEADERS=${{ secrets.CORS_HEADERS }}" >> .env
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
           echo "DEBUG=${{ secrets.DEBUG }}" >> .env
+          echo "ENV=${{ secrets.ENV }}" >> .env
 
       - name: Run tests
         working-directory: ./User-Service
@@ -105,17 +109,20 @@ jobs:
       - name: Create .env file
         working-directory: ./Goals-Service
         run: |
-          echo "ENV=prod" >> .env
           echo "DATABASE_URL=${{ secrets.DATABASE_URL_GOALS }}" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
           echo "ALGORITHM=${{ secrets.ALGORITHM }}" >> .env
+          echo "USER_SERVICE_URL=${{ secrets.USER_SERVICE_URL }}" >> .env
           echo "ENTRIES_SERVICE_URL=${{ secrets.ENTRIES_SERVICE_URL }}" >> .env
+          echo "MAILER_SERVICE_URL=${{ secrets.MAILER_SERVICE_URL }}" >> .env
+          echo "PDF_SERVICE_URL=${{ secrets.PDF_SERVICE_URL }}" >> .env
           echo "CORS_ORIGINS=${{ secrets.CORS_ORIGINS }}" >> .env
           echo "CORS_CREDENTIALS=${{ secrets.CORS_CREDENTIALS }}" >> .env
           echo "CORS_METHODS=${{ secrets.CORS_METHODS }}" >> .env
           echo "CORS_HEADERS=${{ secrets.CORS_HEADERS }}" >> .env
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
           echo "DEBUG=${{ secrets.DEBUG }}" >> .env
+          echo "ENV=${{ secrets.ENV }}" >> .env
 
       - name: Run tests
         working-directory: ./Goals-Service
@@ -171,17 +178,20 @@ jobs:
       - name: Create .env file
         working-directory: ./Entries-Service
         run: |
-          echo "ENV=prod" >> .env
           echo "DATABASE_URL=${{ secrets.DATABASE_URL_ENTRIES }}" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
           echo "ALGORITHM=${{ secrets.ALGORITHM }}" >> .env
+          echo "USER_SERVICE_URL=${{ secrets.USER_SERVICE_URL }}" >> .env
           echo "GOALS_SERVICE_URL=${{ secrets.GOALS_SERVICE_URL }}" >> .env
+          echo "MAILER_SERVICE_URL=${{ secrets.MAILER_SERVICE_URL }}" >> .env
+          echo "PDF_SERVICE_URL=${{ secrets.PDF_SERVICE_URL }}" >> .env
           echo "CORS_ORIGINS=${{ secrets.CORS_ORIGINS }}" >> .env
           echo "CORS_CREDENTIALS=${{ secrets.CORS_CREDENTIALS }}" >> .env
           echo "CORS_METHODS=${{ secrets.CORS_METHODS }}" >> .env
           echo "CORS_HEADERS=${{ secrets.CORS_HEADERS }}" >> .env
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
           echo "DEBUG=${{ secrets.DEBUG }}" >> .env
+          echo "ENV=${{ secrets.ENV }}" >> .env
 
       - name: Run tests
         working-directory: ./Entries-Service
@@ -237,10 +247,12 @@ jobs:
       - name: Create .env file
         working-directory: ./Mailer-Service
         run: |
-          echo "ENV=prod" >> .env
           echo "DATABASE_URL=${{ secrets.DATABASE_URL_MAILER }}" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
           echo "ALGORITHM=${{ secrets.ALGORITHM }}" >> .env
+          echo "USER_SERVICE_URL=${{ secrets.USER_SERVICE_URL }}" >> .env
+          echo "GOALS_SERVICE_URL=${{ secrets.GOALS_SERVICE_URL }}" >> .env
+          echo "ENTRIES_SERVICE_URL=${{ secrets.ENTRIES_SERVICE_URL }}" >> .env
           echo "PDF_SERVICE_URL=${{ secrets.PDF_SERVICE_URL }}" >> .env
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID_SES }}" >> .env
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY_SES }}" >> .env
@@ -253,6 +265,7 @@ jobs:
           echo "CORS_HEADERS=${{ secrets.CORS_HEADERS }}" >> .env
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
           echo "DEBUG=${{ secrets.DEBUG }}" >> .env
+          echo "ENV=${{ secrets.ENV }}" >> .env
 
       - name: Run tests
         working-directory: ./Mailer-Service
@@ -308,13 +321,13 @@ jobs:
       - name: Create .env file
         working-directory: ./PDF-Service
         run: |
-          echo "ENV=prod" >> .env
           echo "DATABASE_URL=${{ secrets.DATABASE_URL_PDF }}" >> .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
           echo "ALGORITHM=${{ secrets.ALGORITHM }}" >> .env
           echo "USER_SERVICE_URL=${{ secrets.USER_SERVICE_URL }}" >> .env
           echo "GOALS_SERVICE_URL=${{ secrets.GOALS_SERVICE_URL }}" >> .env
           echo "ENTRIES_SERVICE_URL=${{ secrets.ENTRIES_SERVICE_URL }}" >> .env
+          echo "MAILER_SERVICE_URL=${{ secrets.MAILER_SERVICE_URL }}" >> .env
           echo "PDF_TEMP_DIR=${{ secrets.PDF_TEMP_DIR }}" >> .env
           echo "PDF_STORAGE_PATH=${{ secrets.PDF_STORAGE_PATH }}" >> .env
           echo "MAX_PDF_SIZE_MB=${{ secrets.MAX_PDF_SIZE_MB }}" >> .env
@@ -324,6 +337,7 @@ jobs:
           echo "CORS_HEADERS=${{ secrets.CORS_HEADERS }}" >> .env
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
           echo "DEBUG=${{ secrets.DEBUG }}" >> .env
+          echo "ENV=${{ secrets.ENV }}" >> .env
 
       - name: Run tests
         working-directory: ./PDF-Service
