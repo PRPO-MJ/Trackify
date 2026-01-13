@@ -253,7 +253,7 @@ async def google_auth(request: GoogleAuthRequest, db: Session = Depends(get_db))
     
     access_token = create_access_token(str(user.google_sub))
     
-    return JSONResponse(
+    response = JSONResponse(
         status_code=status.HTTP_201_CREATED if is_new_user else status.HTTP_200_OK,
         content={
             "access_token": access_token,
@@ -272,6 +272,15 @@ async def google_auth(request: GoogleAuthRequest, db: Session = Depends(get_db))
             }
         }
     )
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        domain=".zusidelavi.com",
+        httponly=True,
+        secure=True,
+        samesite="none"
+    )
+    return response
 
 @app.post(
     "/auth/google/callback",
@@ -358,7 +367,7 @@ async def google_callback(request: GoogleCallbackRequest, db: Session = Depends(
     
     access_token = create_access_token(str(user.google_sub))
     
-    return JSONResponse(
+    response = JSONResponse(
         status_code=status.HTTP_201_CREATED if is_new_user else status.HTTP_200_OK,
         content={
             "access_token": access_token,
@@ -377,6 +386,15 @@ async def google_callback(request: GoogleCallbackRequest, db: Session = Depends(
             }
         }
     )
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        domain=".zusidelavi.com",
+        httponly=True,
+        secure=True,
+        samesite="none"
+    )
+    return response
 
 @app.get(
     "/api/auth/verify",

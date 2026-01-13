@@ -27,7 +27,7 @@ services:
     build:
       context: ./UI/
       args:
-        VITE_GOOGLE_CLIENT_ID: "105331836594-2fap6msaki659c87lqnurnqeah30925n.apps.googleusercontent.com"
+        VITE_GOOGLE_CLIENT_ID: "" # input yours
         VITE_USER_SERVICE_URL: "http://localhost:8006"
         VITE_GOALS_SERVICE_URL: "http://localhost:8008"
         VITE_ENTRIES_SERVICE_URL: "http://localhost:8009"

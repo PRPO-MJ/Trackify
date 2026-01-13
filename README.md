@@ -1,6 +1,6 @@
 # Trackify
 
-**Trackify** is a microservices-based goal and activity tracking application that helps users manage their personal goals, track daily entries, generate PDF reports, and receive email notifications.
+**Trackify** is a microservices based open source goal and activity tracking application that helps users manage their personal goals, track daily entries, generate PDF reports, and receive email notifications.
 
 ## 📋 Table of Contents
 
@@ -14,7 +14,6 @@
   - [Accessing the Application](#accessing-the-application)
 - [Project Structure](#project-structure)
 - [API Documentation](#api-documentation)
-- [Testing](#testing)
 - [Development Workflow](#development-workflow)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
@@ -81,6 +80,7 @@ All services communicate through a Docker network and are orchestrated using Doc
 - **SQLAlchemy** ORM
 - **Pydantic** for data validation
 - **JWT** for authentication
+- **PYTEST** for testing
 
 ### Infrastructure
 - **Docker** & **Docker Compose**
@@ -99,14 +99,12 @@ Before you begin, ensure you have the following installed on your system:
 - **Docker** (version 20.10 or higher)
 - **Docker Compose** (version 2.0 or higher)
 - **Git**
-- At least **8GB of RAM** available for Docker
-- At least **10GB of free disk space**
 
 #### Verify Installation
 
 ```bash
 docker --version
-docker-compose --version
+docker compose --version
 ```
 
 ### Local Development with Docker Compose
@@ -115,7 +113,7 @@ docker-compose --version
 
 ```bash
 # Clone from the main branch (production-ready)
-git clone <repository-url>
+git clone git@github.com:PRPO-MJ/Trackify.git
 cd Trackify
 
 # OR checkout the dev branch for latest features
@@ -139,14 +137,14 @@ Update the `VITE_GOOGLE_CLIENT_ID` in [docker-compose.yaml](docker-compose.yaml)
 VITE_GOOGLE_CLIENT_ID: "your-google-client-id-here"
 ```
 
-> **Note**: The application will work without Google OAuth, but authentication features will be limited.
+> **Note**: The application will not work without Google OAuth as authentication features will be limited.
 
 #### 3. Start the Application
 
 Start all services using Docker Compose:
 
 ```bash
-docker-compose up --build
+docker compose up --build
 ```
 
 This command will:
@@ -156,7 +154,7 @@ This command will:
 - Start all microservices
 - Start the UI on port 3000
 
-**First-time startup** may take 5-10 minutes to build all images.
+**First time startup** may take longer to build all images.
 
 #### 4. Wait for Services to be Ready
 
@@ -164,7 +162,7 @@ Monitor the logs to ensure all services are healthy:
 
 ```bash
 # In another terminal
-docker-compose ps
+docker compose ps
 ```
 
 All services should show status as **healthy**. The UI will be available once you see:
@@ -188,16 +186,17 @@ Once all services are running:
 | **PDF Service API** | http://localhost:8011/docs | Swagger documentation |
 | **Database** | localhost:5432 | PostgreSQL (user: postgres, password: postgres123!) |
 
+
 ### Stopping the Application
 
 To stop all services:
 
 ```bash
 # Stop and remove containers
-docker-compose down
+docker compose down
 
 # Stop and remove containers, volumes, and images
-docker-compose down -v --rmi all
+docker compose down -v --rmi all
 ```
 
 ---
@@ -206,7 +205,7 @@ docker-compose down -v --rmi all
 
 ```
 Trackify/
-├── UI/                          # React frontend application
+├── UI/                         # React frontend application
 │   ├── src/
 │   │   ├── components/         # Reusable UI components
 │   │   ├── pages/              # Page components
@@ -214,69 +213,82 @@ Trackify/
 │   │   └── types/              # TypeScript type definitions
 │   └── Dockerfile
 │
-├── User-Service/                # User authentication service
+├── User-Service/               # User authentication service
 │   ├── src/
-│   │   ├── main.py            # FastAPI application
-│   │   ├── auth.py            # Authentication logic
-│   │   ├── database.py        # Database models
-│   │   └── schemas.py         # Pydantic schemas
+│   │   ├── main.py             # FastAPI application
+│   │   ├── auth.py             # Authentication logic
+│   │   ├── database.py         # Database models
+│   │   ├── schemas.py          # Pydantic schemas
+│   │   ├── config.py           # Configuration
+│   │   ├── goals_client.py     # Module to communicate with Goals Service
+│   │   ├── entries_client.py   # Module to communicate with Entries Service
+│   │   ├── mailer_client.py    # Module to communicate with Mailer Service
+│   │   └── pdf_client.py       # Module to communicate with PDF Service
+│   ├── test/
+│   ├── .env                    # Environment variables
+│   ├── .gitignore              # Git ignore rules 
+│   ├── Dockerfile              # Docker image build instructions 
+│   ├── pyproject.toml          # Python project metadata and dependencies
+│   └── requirements.txt        # Python dependencies
+│
+├── Goals-Service/              # Goal management service
+│   ├── src/
 │   └── test/
 │
-├── Goals-Service/               # Goal management service
+├── Entries-Service/            # Activity tracking service
 │   ├── src/
 │   └── test/
 │
-├── Entries-Service/             # Activity tracking service
+├── Mailer-Service/             # Email notification service
 │   ├── src/
 │   └── test/
 │
-├── Mailer-Service/              # Email notification service
-│   ├── src/
-│   └── test/
-│
-├── PDF-Service/                 # PDF generation service
+├── PDF-Service/                # PDF generation service
 │   ├── src/
 │   └── test/
 │
 ├── Database/
 │   └── init.sql                # Database initialization script
 │
-├── k8s/                         # Kubernetes deployment configs
-│   ├── deploy.sh               # Deployment script
-│   └── *.yaml                  # K8s manifests
+├── .github/
+│   └── workflows
+│       └── ci-cd.yml           # FastAPI application
 │
-├── docker-compose.yaml          # Local development setup
-├── run-all-tests.sh            # Run all tests
-├── run-docker-tests.sh         # Run tests in Docker
-└── README.md                    # This file
+├── docker-compose.yaml         # Local development setup
+├── k8s-msnifest.yaml           # Run k8s setup
+├── README                      # Project overview and instructions
+├── CODE_OF_CONDUCT             # Community standards and guidelines
+└── SECURITY                    # Security policies and reporting
+
 ```
 
 ---
+
 
 ## 📚 API Documentation
 
 Each microservice exposes interactive API documentation via Swagger UI:
 
-- **User Service**: http://localhost:8006/docs
+- **User Service**: http://localhost:8006/api/docs
   - User registration and authentication
   - Profile management
   - Google OAuth integration
 
-- **Goals Service**: http://localhost:8008/docs
+- **Goals Service**: http://localhost:8008/api/docs
   - Create, read, update, delete goals
   - Goal status tracking
   - Goal progress metrics
 
-- **Entries Service**: http://localhost:8009/docs
+- **Entries Service**: http://localhost:8009/api/docs
   - Create and manage activity entries
   - Link entries to goals
   - Query entries by date range
 
-- **Mailer Service**: http://localhost:8010/docs
+- **Mailer Service**: http://localhost:8010/api/docs
   - Send email notifications
   - Email template management
 
-- **PDF Service**: http://localhost:8011/docs
+- **PDF Service**: http://localhost:8011/api/docs
   - Generate progress reports
   - Export data to PDF
 
@@ -295,107 +307,42 @@ curl -H "Authorization: Bearer YOUR_JWT_TOKEN" \
 
 ---
 
-## 🧪 Testing
 
-### Run All Tests Locally
 
-```bash
-# Make the test script executable
-chmod +x run-all-tests.sh
-
-# Run all tests
-./run-all-tests.sh
-```
-
-### Run Tests in Docker
-
-```bash
-# Make the script executable
-chmod +x run-docker-tests.sh
-
-# Run tests in Docker containers
-./run-docker-tests.sh
-```
-
-### Run Tests for Individual Services
-
-```bash
-# User Service tests
-cd User-Service
-pytest test/ -v
-
-# Goals Service tests
-cd Goals-Service
-pytest test/ -v
-
-# And so on for other services...
-```
-
-See [TESTING.md](TESTING.md) for detailed testing documentation.
-
----
 
 ## 🔄 Development Workflow
 
-### Branch Strategy
+- Start from the `dev` branch.
+- Create a feature branch for your changes.
+- When ready, create a Pull Request to merge into `dev`.
 
-- **`main`** - Production-ready code, stable releases
-- **`dev`** - Active development, latest features
-
-### Development Process
-
-1. **Start from the dev branch**:
-   ```bash
-   git checkout dev
-   git pull origin dev
-   ```
-
-2. **Create a feature branch**:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-3. **Make your changes and test locally**:
-   ```bash
-   docker-compose up --build
-   ./run-all-tests.sh
-   ```
-
-4. **Commit and push**:
-   ```bash
-   git add .
-   git commit -m "feat: your feature description"
-   git push origin feature/your-feature-name
-   ```
-
-5. **Create a Pull Request** to merge into `dev`
 
 ### Viewing Logs
 
 ```bash
 # View all logs
-docker-compose logs -f
+docker compose logs -f
 
 # View specific service logs
-docker-compose logs -f user-service
-docker-compose logs -f ui
+docker compose logs -f user-service
+docker compose logs -f ui
 
 # View last 100 lines
-docker-compose logs --tail=100 goals-service
+docker compose logs --tail=100 goals-service
 ```
 
 ### Rebuilding After Changes
 
 ```bash
 # Rebuild specific service
-docker-compose up --build user-service
+docker compose up --build user-service
 
 # Rebuild all services
-docker-compose up --build
+docker compose up --build
 
 # Force rebuild without cache
-docker-compose build --no-cache
-docker-compose up
+docker compose build --no-cache
+docker compose up
 ```
 
 ### Accessing Service Containers
@@ -406,7 +353,7 @@ docker exec -it user-service bash
 docker exec -it database psql -U postgres -d trackify
 
 # Check container status
-docker-compose ps
+docker compose ps
 
 # View resource usage
 docker stats
@@ -425,13 +372,13 @@ docker stats
 **Solution**:
 ```bash
 # Check logs for errors
-docker-compose logs
+docker compose logs
 
 # Remove old containers and volumes
-docker-compose down -v
+docker compose down -v
 
 # Rebuild and restart
-docker-compose up --build
+docker compose up --build
 ```
 
 #### Database Connection Issues
@@ -441,13 +388,13 @@ docker-compose up --build
 **Solution**:
 ```bash
 # Check if database is healthy
-docker-compose ps database
+docker compose ps database
 
 # Check database logs
-docker-compose logs database
+docker compose logs database
 
 # Restart database
-docker-compose restart database
+docker compose restart database
 ```
 
 #### Port Already in Use
@@ -485,7 +432,7 @@ docker volume prune
 **Problem**: CORS errors or network errors in browser console.
 
 **Solution**:
-1. Ensure all services are running: `docker-compose ps`
+1. Ensure all services are running: `docker compose ps`
 2. Check service health endpoints:
    ```bash
    curl http://localhost:8006/api/users/health/liveness
@@ -530,19 +477,8 @@ This project is licensed under the terms specified in the [LICENSE](LICENSE) fil
 
 For issues, questions, or contributions:
 - Open an issue on the repository
-- Check existing documentation in the `/Documentation` folder
 - Review [SECURITY.md](SECURITY.md) for security-related concerns
 
 ---
 
-## 🌟 Additional Resources
-
-- [Kubernetes Deployment Guide](k8s/README.md)
-- [AWS Setup Instructions](k8s/AWS-SETUP.md)
-- [CI/CD Pipeline Documentation](k8s/CI-CD-PIPELINE.md)
-- [Cloudflare UI Deployment](k8s/CLOUDFLARE-UI-DEPLOYMENT.md)
-- [Testing Documentation](TESTING.md)
-
----
-
-**Happy Tracking! 🚀**
+**Happy Tracking! ⌛**
