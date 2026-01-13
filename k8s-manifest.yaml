@@ -31,9 +31,6 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
-        envFrom:
-        - secretRef:
-            name: user-service-secrets
         livenessProbe:
           httpGet:
             path: /api/users/health/liveness
@@ -111,9 +108,6 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
-        envFrom:
-        - secretRef:
-            name: goals-service-secrets
         livenessProbe:
           httpGet:
             path: /api/goals/health/liveness
@@ -191,9 +185,6 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
-        envFrom:
-        - secretRef:
-            name: entries-service-secrets
         livenessProbe:
           httpGet:
             path: /api/entries/health/liveness
@@ -271,9 +262,6 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
-        envFrom:
-        - secretRef:
-            name: mailer-service-secrets
         livenessProbe:
           httpGet:
             path: /api/mail/health/liveness
@@ -351,9 +339,6 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
-        envFrom:
-        - secretRef:
-            name: pdf-service-secrets
         livenessProbe:
           httpGet:
             path: /api/pdf/health/liveness
