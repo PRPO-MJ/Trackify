@@ -24,6 +24,22 @@ spec:
         image: 251986419004.dkr.ecr.eu-central-1.amazonaws.com/prpo/trackify:user-service-latest
         ports:
         - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /api/users/health/liveness
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/users/health/readiness
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
         resources:
           requests:
             cpu: 100m
@@ -85,6 +101,22 @@ spec:
         image: 251986419004.dkr.ecr.eu-central-1.amazonaws.com/prpo/trackify:goals-service-latest
         ports:
         - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /api/goals/health/liveness
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/goals/health/readiness
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
         resources:
           requests:
             cpu: 100m
@@ -146,6 +178,22 @@ spec:
         image: 251986419004.dkr.ecr.eu-central-1.amazonaws.com/prpo/trackify:entries-service-latest
         ports:
         - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /api/entries/health/liveness
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/entries/health/readiness
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
         resources:
           requests:
             cpu: 100m
@@ -207,6 +255,22 @@ spec:
         image: 251986419004.dkr.ecr.eu-central-1.amazonaws.com/prpo/trackify:mailer-service-latest
         ports:
         - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /api/mail/health/liveness
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/mail/health/readiness
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
         resources:
           requests:
             cpu: 100m
@@ -268,6 +332,22 @@ spec:
         image: 251986419004.dkr.ecr.eu-central-1.amazonaws.com/prpo/trackify:pdf-service-latest
         ports:
         - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /api/pdf/health/liveness
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/pdf/health/readiness
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
         resources:
           requests:
             cpu: 100m
