@@ -3,8 +3,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { API_ENDPOINTS } from '@/lib/api-config';
 
-const USER_SERVICE_URL = import.meta.env.VITE_USER_SERVICE_URL || 'http://localhost:8006';
 const REDIRECT_URI = `${window.location.origin}/auth/callback`;
 
 export default function AuthCallback() {
@@ -36,7 +36,7 @@ export default function AuthCallback() {
     try {
       console.log('📤 Exchanging authorization code for token...');
       
-      const authResponse = await fetch(`${USER_SERVICE_URL}/auth/google/callback`, {
+      const authResponse = await fetch(API_ENDPOINTS.auth.googleCallback, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

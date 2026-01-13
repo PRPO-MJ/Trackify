@@ -14,11 +14,16 @@ export const API_PDF_URL = API_BASE;
 export const API_MAILER_URL = API_BASE;
 
 export const API_ENDPOINTS = {
+  // Auth Service
+  auth: {
+    googleCallback: 'https://api.trackify.zusidelavi.com/auth/google/callback', // Note: No /api prefix for this endpoint
+    google: `${API_BASE}/auth/google`,
+    verify: `${API_BASE}/auth/verify`,
+  },
   // User Service
   user: {
     profile: `${API_BASE}/users/me`,
     updateProfile: `${API_BASE}/users/me`,
-    verify: `${API_BASE}/auth/verify`,
   },
   // Goals Service
   goals: {
