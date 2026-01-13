@@ -405,7 +405,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /api/user
+      - path: /api/users
         pathType: Prefix
         backend:
           service:
@@ -426,7 +426,7 @@ spec:
             name: entries-service
             port:
               number: 80
-      - path: /api/mailer
+      - path: /api/mail
         pathType: Prefix
         backend:
           service:
