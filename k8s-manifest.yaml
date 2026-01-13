@@ -1,0 +1,457 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: trackify
+---
+# User Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  namespace: trackify
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+      - name: user-service
+        image: 251986419004.dkr.ecr.eu-central-1.amazonaws.com/prpo/trackify:user-service-latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        envFrom:
+        - secretRef:
+            name: user-service-secrets
+        livenessProbe:
+          httpGet:
+            path: /api/users/health/liveness
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/users/health/readiness
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  namespace: trackify
+spec:
+  selector:
+    app: user-service
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: user-service-hpa
+  namespace: trackify
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: user-service
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+---
+# Goals Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goals-service
+  namespace: trackify
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: goals-service
+  template:
+    metadata:
+      labels:
+        app: goals-service
+    spec:
+      containers:
+      - name: goals-service
+        image: 251986419004.dkr.ecr.eu-central-1.amazonaws.com/prpo/trackify:goals-service-latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        envFrom:
+        - secretRef:
+            name: goals-service-secrets
+        livenessProbe:
+          httpGet:
+            path: /api/goals/health/liveness
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/goals/health/readiness
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: goals-service
+  namespace: trackify
+spec:
+  selector:
+    app: goals-service
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: goals-service-hpa
+  namespace: trackify
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: goals-service
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+---
+# Entries Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: entries-service
+  namespace: trackify
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: entries-service
+  template:
+    metadata:
+      labels:
+        app: entries-service
+    spec:
+      containers:
+      - name: entries-service
+        image: 251986419004.dkr.ecr.eu-central-1.amazonaws.com/prpo/trackify:entries-service-latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        envFrom:
+        - secretRef:
+            name: entries-service-secrets
+        livenessProbe:
+          httpGet:
+            path: /api/entries/health/liveness
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/entries/health/readiness
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: entries-service
+  namespace: trackify
+spec:
+  selector:
+    app: entries-service
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: entries-service-hpa
+  namespace: trackify
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: entries-service
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+---
+# Mailer Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mailer-service
+  namespace: trackify
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mailer-service
+  template:
+    metadata:
+      labels:
+        app: mailer-service
+    spec:
+      containers:
+      - name: mailer-service
+        image: 251986419004.dkr.ecr.eu-central-1.amazonaws.com/prpo/trackify:mailer-service-latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        envFrom:
+        - secretRef:
+            name: mailer-service-secrets
+        livenessProbe:
+          httpGet:
+            path: /api/mail/health/liveness
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/mail/health/readiness
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mailer-service
+  namespace: trackify
+spec:
+  selector:
+    app: mailer-service
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mailer-service-hpa
+  namespace: trackify
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mailer-service
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+---
+# PDF Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pdf-service
+  namespace: trackify
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pdf-service
+  template:
+    metadata:
+      labels:
+        app: pdf-service
+    spec:
+      containers:
+      - name: pdf-service
+        image: 251986419004.dkr.ecr.eu-central-1.amazonaws.com/prpo/trackify:pdf-service-latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        envFrom:
+        - secretRef:
+            name: pdf-service-secrets
+        livenessProbe:
+          httpGet:
+            path: /api/pdf/health/liveness
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/pdf/health/readiness
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pdf-service
+  namespace: trackify
+spec:
+  selector:
+    app: pdf-service
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: pdf-service-hpa
+  namespace: trackify
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: pdf-service
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+---
+# Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: trackify-ingress
+  namespace: trackify
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:251986419004:certificate/9518bded-595a-4577-bd9f-41297481c22e
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/user
+        pathType: Prefix
+        backend:
+          service:
+            name: user-service
+            port:
+              number: 80
+      - path: /api/goals
+        pathType: Prefix
+        backend:
+          service:
+            name: goals-service
+            port:
+              number: 80
+      - path: /api/entries
+        pathType: Prefix
+        backend:
+          service:
+            name: entries-service
+            port:
+              number: 80
+      - path: /api/mailer
+        pathType: Prefix
+        backend:
+          service:
+            name: mailer-service
+            port:
+              number: 80
+      - path: /api/pdf
+        pathType: Prefix
+        backend:
+          service:
+            name: pdf-service
+            port:
+              number: 80
