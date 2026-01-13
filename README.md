@@ -179,11 +179,11 @@ Once all services are running:
 | Component | URL | Description |
 |-----------|-----|-------------|
 | **UI** | http://localhost:3000 | Main application interface |
-| **User Service API** | http://localhost:8006/docs | Swagger documentation |
-| **Goals Service API** | http://localhost:8008/docs | Swagger documentation |
-| **Entries Service API** | http://localhost:8009/docs | Swagger documentation |
-| **Mailer Service API** | http://localhost:8010/docs | Swagger documentation |
-| **PDF Service API** | http://localhost:8011/docs | Swagger documentation |
+| **User Service API** | http://localhost:8006/api/docs | Swagger documentation |
+| **Goals Service API** | http://localhost:8008/api/docs | Swagger documentation |
+| **Entries Service API** | http://localhost:8009/api/docs | Swagger documentation |
+| **Mailer Service API** | http://localhost:8010/api/docs | Swagger documentation |
+| **PDF Service API** | http://localhost:8011/api/docs | Swagger documentation |
 | **Database** | localhost:5432 | PostgreSQL (user: postgres, password: postgres123!) |
 
 
