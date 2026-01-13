@@ -407,6 +407,13 @@ spec:
   - host: api.trackify.zusidelavi.com
     http:
       paths:
+      - path: /auth
+        pathType: Prefix
+        backend:
+          service:
+            name: user-service
+            port:
+              number: 80
       - path: /api/users
         pathType: Prefix
         backend:
