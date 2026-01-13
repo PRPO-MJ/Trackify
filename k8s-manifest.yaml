@@ -404,7 +404,8 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-  - http:
+  - host: api.trackify.zusidelavi.com
+    http:
       paths:
       - path: /api/users
         pathType: Prefix

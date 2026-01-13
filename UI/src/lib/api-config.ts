@@ -1,53 +1,53 @@
 /**
  * API Client Configuration
  * Centralized API endpoint configuration
+ * Points to API subdomain hosted on AWS EKS
  */
 
-const USER_SERVICE_URL = import.meta.env.VITE_USER_SERVICE_URL || 'http://localhost:8006';
-const GOALS_SERVICE_URL = import.meta.env.VITE_GOALS_SERVICE_URL || 'http://localhost:8008';
-const ENTRIES_SERVICE_URL = import.meta.env.VITE_ENTRIES_SERVICE_URL || 'http://localhost:8009';
-const PDF_SERVICE_URL = import.meta.env.VITE_PDF_SERVICE_URL || 'http://localhost:8010';
-const MAILER_SERVICE_URL = import.meta.env.VITE_MAILER_SERVICE_URL || 'http://localhost:8002';
+// Base API URL - points to K8s cluster via subdomain
+const API_BASE = 'https://api.trackify.zusidelavi.com/api';
 
-export const API_USER_URL = USER_SERVICE_URL + '/api';
-export const API_GOALS_URL = GOALS_SERVICE_URL + '/api';
-export const API_ENTRIES_URL = ENTRIES_SERVICE_URL + '/api';
-export const API_PDF_URL = PDF_SERVICE_URL + '/api';
-export const API_MAILER_URL = MAILER_SERVICE_URL + '/api';
+export const API_USER_URL = API_BASE;
+export const API_GOALS_URL = API_BASE;
+export const API_ENTRIES_URL = API_BASE;
+export const API_PDF_URL = API_BASE;
+export const API_MAILER_URL = API_BASE;
 
 export const API_ENDPOINTS = {
   // User Service
   user: {
-    profile: `${USER_SERVICE_URL}/api/users/me`,
-    updateProfile: `${USER_SERVICE_URL}/api/users/me`,
-    verify: `${USER_SERVICE_URL}/api/auth/verify`,
+    profile: `${API_BASE}/users/me`,
+    updateProfile: `${API_BASE}/users/me`,
+    verify: `${API_BASE}/auth/verify`,
   },
   // Goals Service
   goals: {
-    list: `${GOALS_SERVICE_URL}/api/goals`,
-    create: `${GOALS_SERVICE_URL}/api/goals`,
-    detail: (id: string) => `${GOALS_SERVICE_URL}/api/goals/${id}`,
-    update: (id: string) => `${GOALS_SERVICE_URL}/api/goals/${id}`,
-    delete: (id: string) => `${GOALS_SERVICE_URL}/api/goals/${id}`,
+    list: `${API_BASE}/goals`,
+    create: `${API_BASE}/goals`,
+    detail: (id: string) => `${API_BASE}/goals/${id}`,
+    update: (id: string) => `${API_BASE}/goals/${id}`,
+    delete: (id: string) => `${API_BASE}/goals/${id}`,
   },
   // Entries Service
   entries: {
-    list: `${ENTRIES_SERVICE_URL}/api/entries`,
-    create: `${ENTRIES_SERVICE_URL}/api/entries`,
-    detail: (id: string) => `${ENTRIES_SERVICE_URL}/api/entries/${id}`,
-    update: (id: string) => `${ENTRIES_SERVICE_URL}/api/entries/${id}`,
-    delete: (id: string) => `${ENTRIES_SERVICE_URL}/api/entries/${id}`,
-    byGoal: (goalId: string) => `${ENTRIES_SERVICE_URL}/api/goals/${goalId}/entries`,
+    list: `${API_BASE}/entries`,
+    create: `${API_BASE}/entries`,
+    detail: (id: string) => `${API_BASE}/entries/${id}`,
+    update: (id: string) => `${API_BASE}/entries/${id}`,
+    delete: (id: string) => `${API_BASE}/entries/${id}`,
+    byGoal: (goalId: string) => `${API_BASE}/goals/${goalId}/entries`,
   },
   // PDF Service
   pdf: {
-    goalReport: (goalId: string) => `${PDF_SERVICE_URL}/api/pdf/goal/${goalId}`,
-    fullReport: `${PDF_SERVICE_URL}/api/pdf/report`,
+    goalReport: (goalId: string) => `${API_BASE}/pdf/goal/${goalId}`,
+    fullReport: `${API_BASE}/pdf/report`,
   },
   // Mailer Service
   mailer: {
-    emailSettings: (goalId: string) => `${MAILER_SERVICE_URL}/api/mail/settings/${goalId}`,
-    saveSettings: `${MAILER_SERVICE_URL}/api/mail/settings`,
+    emailSettings: (goalId: string) => `${API_BASE}/mail/settings/${goalId}`,
+    saveSettings: `${API_BASE}/mail/settings`,
+  },
+};
     sendNow: `${MAILER_SERVICE_URL}/api/mail/send-now`,
   },
 };
