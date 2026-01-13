@@ -452,41 +452,42 @@ jobs:
       - name: Deploy to EKS
         run: |
           echo "Deploying services to EKS cluster..."
+          IMAGE_TAG=${{ github.sha }}
           
           # Deploy User Service
           if [ "${{ needs.user-service.result }}" == "success" ]; then
-            echo "Restarting user-service deployment..."
-            kubectl rollout restart deployment/user-service -n trackify
+            echo "Updating user-service image to SHA: $IMAGE_TAG..."
+            kubectl set image deployment/user-service user-service=$ECR_REGISTRY/prpo/trackify:user-service-$IMAGE_TAG -n trackify
+            kubectl rollout status deployment/user-service -n trackify --timeout=5m
           fi
           
           # Deploy Goals Service
           if [ "${{ needs.goals-service.result }}" == "success" ]; then
-            echo "Restarting goals-service deployment..."
-            kubectl rollout restart deployment/goals-service -n trackify
+            echo "Updating goals-service image to SHA: $IMAGE_TAG..."
+            kubectl set image deployment/goals-service goals-service=$ECR_REGISTRY/prpo/trackify:goals-service-$IMAGE_TAG -n trackify
+            kubectl rollout status deployment/goals-service -n trackify --timeout=5m
           fi
           
           # Deploy Entries Service
           if [ "${{ needs.entries-service.result }}" == "success" ]; then
-            echo "Restarting entries-service deployment..."
-            kubectl rollout restart deployment/entries-service -n trackify
+            echo "Updating entries-service image to SHA: $IMAGE_TAG..."
+            kubectl set image deployment/entries-service entries-service=$ECR_REGISTRY/prpo/trackify:entries-service-$IMAGE_TAG -n trackify
+            kubectl rollout status deployment/entries-service -n trackify --timeout=5m
           fi
           
           # Deploy Mailer Service
           if [ "${{ needs.mailer-service.result }}" == "success" ]; then
-            echo "Restarting mailer-service deployment..."
-            kubectl rollout restart deployment/mailer-service -n trackify
+            echo "Updating mailer-service image to SHA: $IMAGE_TAG..."
+            kubectl set image deployment/mailer-service mailer-service=$ECR_REGISTRY/prpo/trackify:mailer-service-$IMAGE_TAG -n trackify
+            kubectl rollout status deployment/mailer-service -n trackify --timeout=5m
           fi
           
           # Deploy PDF Service
           if [ "${{ needs.pdf-service.result }}" == "success" ]; then
-            echo "Restarting pdf-service deployment..."
-            kubectl rollout restart deployment/pdf-service -n trackify
+            echo "Updating pdf-service image to SHA: $IMAGE_TAG..."
+            kubectl set image deployment/pdf-service pdf-service=$ECR_REGISTRY/prpo/trackify:pdf-service-$IMAGE_TAG -n trackify
+            kubectl rollout status deployment/pdf-service -n trackify --timeout=5m
           fi
-
-      - name: Wait for rollout to complete
-        run: |
-          echo "Waiting for deployments to complete..."
-          kubectl rollout status deployment -n trackify --timeout=10m
 
       - name: Verify deployment
         run: |
@@ -495,6 +496,13 @@ jobs:
           echo ""
           echo "=== Services Status ==="
           kubectl get svc -n trackify
+          echo ""
+          echo "=== Load Balancer / Ingress IP ==="
+          kubectl get svc -n trackify -o wide | grep LoadBalancer || echo "No LoadBalancer service found"
+          kubectl get ingress -n trackify -o wide 2>/dev/null || echo "No Ingress configured"
+          echo ""
+          echo "=== External Endpoints ==="
+          kubectl get svc -n trackify --field-selector spec.type=LoadBalancer -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.loadBalancer.ingress[0].hostname}{.status.loadBalancer.ingress[0].ip}{"\n"}{end}' || echo "No external endpoints found"
           echo ""
           echo "=== HPA Status ==="
           kubectl get hpa -n trackify || echo "No HPA configured"
