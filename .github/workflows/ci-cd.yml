@@ -360,6 +360,9 @@ jobs:
   ui-service:
     name: Build and Deploy UI to Cloudflare Pages
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -432,6 +435,13 @@ jobs:
       - name: Update kubeconfig
         run: |
           aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region ${{ secrets.AWS_REGION || 'eu-central-1' }}
+
+      - name: Verify cluster connection
+        run: |
+          echo "Verifying connection to EKS cluster..."
+          kubectl cluster-info
+          kubectl get nodes
+          echo "Connection verified!"
 
       - name: Apply Kubernetes manifests
         run: |
