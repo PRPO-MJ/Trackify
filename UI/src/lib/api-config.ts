@@ -46,9 +46,7 @@ export const API_ENDPOINTS = {
   mailer: {
     emailSettings: (goalId: string) => `${API_BASE}/mail/settings/${goalId}`,
     saveSettings: `${API_BASE}/mail/settings`,
-  },
-};
-    sendNow: `${MAILER_SERVICE_URL}/api/mail/send-now`,
+    sendNow: `${API_BASE}/mail/send-now`,
   },
 };
 
