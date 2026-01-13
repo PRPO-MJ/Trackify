@@ -4,6 +4,7 @@ A FastAPI based PDF generation service that creates reports.
 """
 
 from fastapi import FastAPI, HTTPException, Depends, status
+from sqlalchemy.exc import SQLAlchemyError
 from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
@@ -36,6 +37,7 @@ from goals_client import get_user_goals, get_goal_by_id
 from entries_client import get_user_time_stats, get_goal_total_hours
 
 from pdf_generator import generate_goal_report_pdf, generate_goal_specific_pdf
+from database import get_db
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
