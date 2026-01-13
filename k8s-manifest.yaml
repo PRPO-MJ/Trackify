@@ -3,7 +3,6 @@ kind: Namespace
 metadata:
   name: trackify
 ---
-# User Service
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11,6 +10,7 @@ metadata:
   namespace: trackify
 spec:
   replicas: 2
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: user-service
@@ -31,22 +31,6 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
-        # livenessProbe:
-        #   httpGet:
-        #     path: /api/users/health/liveness
-        #     port: 80
-        #   initialDelaySeconds: 30
-        #   periodSeconds: 30
-        #   timeoutSeconds: 10
-        #   failureThreshold: 3
-        # readinessProbe:
-        #   httpGet:
-        #     path: /api/users/health/readiness
-        #     port: 80
-        #   initialDelaySeconds: 10
-        #   periodSeconds: 10
-        #   timeoutSeconds: 5
-        #   failureThreshold: 3
 ---
 apiVersion: v1
 kind: Service
@@ -80,7 +64,6 @@ spec:
         type: Utilization
         averageUtilization: 70
 ---
-# Goals Service
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -88,6 +71,7 @@ metadata:
   namespace: trackify
 spec:
   replicas: 2
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: goals-service
@@ -108,22 +92,6 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
-        # livenessProbe:
-        #   httpGet:
-        #     path: /api/goals/health/liveness
-        #     port: 80
-        #   initialDelaySeconds: 30
-        #   periodSeconds: 30
-        #   timeoutSeconds: 10
-        #   failureThreshold: 3
-        # readinessProbe:
-        #   httpGet:
-        #     path: /api/goals/health/readiness
-        #     port: 80
-        #   initialDelaySeconds: 10
-        #   periodSeconds: 10
-        #   timeoutSeconds: 5
-        #   failureThreshold: 3
 ---
 apiVersion: v1
 kind: Service
@@ -157,7 +125,6 @@ spec:
         type: Utilization
         averageUtilization: 70
 ---
-# Entries Service
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -165,6 +132,7 @@ metadata:
   namespace: trackify
 spec:
   replicas: 2
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: entries-service
@@ -185,22 +153,6 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
-        # livenessProbe:
-        #   httpGet:
-        #     path: /api/entries/health/liveness
-        #     port: 80
-        #   initialDelaySeconds: 30
-        #   periodSeconds: 30
-        #   timeoutSeconds: 10
-        #   failureThreshold: 3
-        # readinessProbe:
-        #   httpGet:
-        #     path: /api/entries/health/readiness
-        #     port: 80
-        #   initialDelaySeconds: 10
-        #   periodSeconds: 10
-        #   timeoutSeconds: 5
-        #   failureThreshold: 3
 ---
 apiVersion: v1
 kind: Service
@@ -234,7 +186,6 @@ spec:
         type: Utilization
         averageUtilization: 70
 ---
-# Mailer Service
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -242,6 +193,7 @@ metadata:
   namespace: trackify
 spec:
   replicas: 2
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: mailer-service
@@ -262,22 +214,6 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
-        # livenessProbe:
-        #   httpGet:
-        #     path: /api/mail/health/liveness
-        #     port: 80
-        #   initialDelaySeconds: 30
-        #   periodSeconds: 30
-        #   timeoutSeconds: 10
-        #   failureThreshold: 3
-        # readinessProbe:
-        #   httpGet:
-        #     path: /api/mail/health/readiness
-        #     port: 80
-        #   initialDelaySeconds: 10
-        #   periodSeconds: 10
-        #   timeoutSeconds: 5
-        #   failureThreshold: 3
 ---
 apiVersion: v1
 kind: Service
@@ -311,7 +247,6 @@ spec:
         type: Utilization
         averageUtilization: 70
 ---
-# PDF Service
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -319,6 +254,7 @@ metadata:
   namespace: trackify
 spec:
   replicas: 2
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: pdf-service
@@ -339,22 +275,6 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
-        # livenessProbe:
-        #   httpGet:
-        #     path: /api/pdf/health/liveness
-        #     port: 80
-        #   initialDelaySeconds: 30
-        #   periodSeconds: 30
-        #   timeoutSeconds: 10
-        #   failureThreshold: 3
-        # readinessProbe:
-        #   httpGet:
-        #     path: /api/pdf/health/readiness
-        #     port: 80
-        #   initialDelaySeconds: 10
-        #   periodSeconds: 10
-        #   timeoutSeconds: 5
-        #   failureThreshold: 3
 ---
 apiVersion: v1
 kind: Service
@@ -388,20 +308,21 @@ spec:
         type: Utilization
         averageUtilization: 70
 ---
-# Ingress
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: trackify-ingress
   namespace: trackify
   annotations:
-    kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:251986419004:certificate/9518bded-595a-4577-bd9f-41297481c22e
     alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/subnets: "subnet-059659191ee26d7c1,subnet-0af9ee83182a361b1,subnet-05ca485ce9de9d84f"
+    alb.ingress.kubernetes.io/security-groups: "sg-0c22ff29073e1f998"
 spec:
+  ingressClassName: alb
   rules:
   - http:
       paths:
@@ -440,3 +361,5 @@ spec:
             name: pdf-service
             port:
               number: 80
+
+

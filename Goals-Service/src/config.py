@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 ENV = os.getenv("ENV", "prod")
 
-if ENV == "dev":
+if ENV == "dev" or ENV == "prod":
     load_dotenv(".env")
 
 DATABASE_URL = os.getenv("DATABASE_URL")

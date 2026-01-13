@@ -1,1 +1,2 @@
-/api/*  https://your-k8s-loadbalancer-endpoint/:splat  200
+/api/*  https://k8s-trackify-trackify-e41f9349ff-1261612965.eu-central-1.elb.amazonaws.com/:splat  200
+
