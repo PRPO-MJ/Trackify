@@ -1,11 +1,11 @@
 /**
  * API Client Configuration
  * Centralized API endpoint configuration
- * Points to API subdomain hosted on AWS EKS
+ * Points to API path on main domain hosted on AWS EKS
  */
 
-// Base API URL - points to K8s cluster via subdomain
-const API_BASE = 'https://api.trackify.zusidelavi.com/api';
+// Base API URL - points to K8s cluster via path-based routing
+const API_BASE = '/api';
 
 export const API_USER_URL = API_BASE;
 export const API_GOALS_URL = API_BASE;
