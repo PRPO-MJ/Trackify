@@ -407,7 +407,7 @@ spec:
   - host: api.trackify.zusidelavi.com
     http:
       paths:
-      - path: /auth
+      - path: /api/auth
         pathType: Prefix
         backend:
           service:
