@@ -7,7 +7,7 @@ export interface PDFGenerateResponse {
 
 export const PDFAPI = {
   async generateGoalPDF(goalId: string, token?: string): Promise<PDFGenerateResponse> {
-    const response = await fetch(`${API_PDF_URL}/goal/${goalId}`, {
+    const response = await fetch(`${API_PDF_URL}/pdf/goal/${goalId}`, {
       method: 'GET',
       headers: getAuthHeaders(token),
     });
@@ -32,7 +32,7 @@ export const PDFAPI = {
 
  
   async generateFullReport(token?: string): Promise<PDFGenerateResponse> {
-    const response = await fetch(`${API_PDF_URL}/full-report`, {
+    const response = await fetch(`${API_PDF_URL}/pdf/full-report`, {
       method: 'GET',
       headers: getAuthHeaders(token),
     });
