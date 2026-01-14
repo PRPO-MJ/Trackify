@@ -16,7 +16,7 @@ import { WorkEntryList } from '@/components/goals/WorkEntryList';
 import { Goal } from '@/types/goal';
 import { GoalsAPI } from '@/lib/goals-api';
 import { EntriesAPI } from '@/lib/entries-api';
-import { generateGoalPDF } from '@/lib/pdf-api';
+import { PDFAPI  } from '@/lib/pdf-api';
 import { MailerAPI } from '@/lib/mailer-api';
 import { useAuth } from '@/context/AuthContext';
 import { useUserController } from '@/controllers/useUserController';
@@ -226,7 +226,7 @@ export default function GoalDetail() {
     if (!goal || !token) return;
     
     try {
-      await generateGoalPDF(goal.id, token);
+      await PDFAPI.generateGoalPDF(goal.id, token);
       toast.success('PDF report generated and downloaded');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to generate PDF';
