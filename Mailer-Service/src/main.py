@@ -74,6 +74,7 @@ app = FastAPI(
     version="1.0.0",
     docs_url="/api/mail/docs",
     redoc_url="/api/mail/redoc",
+    openapi_url="/api/mail/openapi.json",
     contact={
         "name": "Trackify Support",
         "email": "trackify@zusidelavi.com"
