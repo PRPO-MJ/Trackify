@@ -292,6 +292,10 @@ Each microservice exposes interactive API documentation via Swagger UI:
   - Generate progress reports
   - Export data to PDF
 
+### ⚠️ API Documentation in Kubernetes
+
+When deployed in Kubernetes, the API documentation for each service is available at `/api/<service-name>/docs`. Replace `<service-name>` with the respective service name (e.g., `users`, `goals`, `entries`, `mail`, `pdf`).
+
 ### Example API Requests
 
 #### User Service - Health Check

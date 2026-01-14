@@ -74,8 +74,8 @@ app = FastAPI(
     All user endpoints (except auth) require JWT authentication via Bearer token.
     """,
     version="1.0.0",
-    docs_url="/api/docs",
-    redoc_url="/api/redoc",
+    docs_url="/api/users/docs",
+    redoc_url="/api/users/redoc",
     openapi_url="/api/openapi.json",
     contact={
         "name": "Trackify Support",
