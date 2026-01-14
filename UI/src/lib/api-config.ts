@@ -16,7 +16,7 @@ export const API_MAILER_URL = API_BASE;
 export const API_ENDPOINTS = {
   // Auth Service
   auth: {
-    googleCallback: 'https://api.trackify.zusidelavi.com/auth/google/callback', // Note: No /api prefix for this endpoint
+    googleCallback: 'https://api.trackify.zusidelavi.com/api/auth/google/callback',
     google: `${API_BASE}/auth/google`,
     verify: `${API_BASE}/auth/verify`,
   },
