@@ -5,7 +5,7 @@ import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { API_ENDPOINTS } from '@/lib/api-config';
 
-const REDIRECT_URI = `${window.location.origin}/auth/callback`;
+const REDIRECT_URI = `api.${window.location.origin}/api/auth/google/callback`;
 
 export default function AuthCallback() {
   const navigate = useNavigate();

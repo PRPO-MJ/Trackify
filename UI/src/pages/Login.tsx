@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Goal, Loader2 } from 'lucide-react';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '105331836594-2fap6msaki659c87lqnurnqeah30925n.apps.googleusercontent.com';
-const REDIRECT_URI = `${window.location.origin}/auth/callback`;
+const REDIRECT_URI = `api.${window.location.origin}/api/auth/google/callback`;
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);

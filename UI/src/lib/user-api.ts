@@ -88,7 +88,7 @@ export class UserAPI {
    * Verify JWT token
    */
   static async verifyToken(token?: string): Promise<{ valid: boolean; user_id: string }> {
-    const response = await fetch(API_ENDPOINTS.user.verify, {
+    const response = await fetch(API_ENDPOINTS.auth.verify, {
       method: 'GET',
       headers: getAuthHeaders(token),
     });

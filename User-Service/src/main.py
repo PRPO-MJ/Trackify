@@ -283,7 +283,7 @@ async def google_auth(request: GoogleAuthRequest, db: Session = Depends(get_db))
     return response
 
 @app.post(
-    "/auth/google/callback",
+    "/api/auth/google/callback",
     response_model=TokenResponse,
     tags=["Authentication"],
     summary="Google OAuth Callback (Server-Side Flow)",
