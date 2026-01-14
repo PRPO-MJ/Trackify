@@ -5,8 +5,7 @@ import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { API_ENDPOINTS } from '@/lib/api-config';
 
-//const REDIRECT_URI = `${window.location.origin}/api/auth/google/callback`;
-const REDIRECT_URI = "https://api.trackify.zusidelavi.com/api/auth/google/callback";
+const REDIRECT_URI = `${window.location.origin}/auth/google/callback`;
 export default function AuthCallback() {
   const navigate = useNavigate();
   const { setToken } = useAuth();
@@ -41,6 +40,7 @@ export default function AuthCallback() {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ 
           code,
           redirect_uri: REDIRECT_URI 

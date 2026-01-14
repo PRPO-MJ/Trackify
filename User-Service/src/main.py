@@ -138,18 +138,18 @@ async def readiness():
 # AUTHENTICATION ENDPOINTS
 # ============================================================================
 
-@app.options("/api/auth/google")
-async def options_google_auth():
-    """Handle CORS preflight for Google auth endpoint"""
-    return JSONResponse(
-        content={},
-        headers={
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "POST, OPTIONS",
-            "Access-Control-Allow-Headers": "*",
-            "Access-Control-Allow-Credentials": "true",
-        }
-    )
+#@app.options("/api/auth/google")
+#async def options_google_auth():
+#    """Handle CORS preflight for Google auth endpoint"""
+#    return JSONResponse(
+#        content={},
+#        headers={
+#            "Access-Control-Allow-Origin": "*",
+#            "Access-Control-Allow-Methods": "POST, OPTIONS",
+#            "Access-Control-Allow-Headers": "*",
+#            "Access-Control-Allow-Credentials": "true",
+#        }
+#    )
 
 @app.post(
     "/api/auth/google",
