@@ -41,7 +41,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<RootRedirect />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/auth/google/callback" element={<AuthCallback />} />
             <Route 
               path="/dashboard" 
               element={
