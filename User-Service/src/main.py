@@ -146,7 +146,7 @@ async def options_google_auth(request: Request):
         headers={
             "Access-Control-Allow-Origin": request.headers.get("origin", "*"),
             "Access-Control-Allow-Methods": "POST, OPTIONS",
-            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Headers": "content-type, authorization",
             "Access-Control-Allow-Credentials": "true",
         }
     )
