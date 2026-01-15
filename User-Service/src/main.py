@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime, timezone
 import traceback
+import os
 
 from config import (
     CORS_ORIGINS,
@@ -43,7 +44,12 @@ from schemas import (
     DeleteResponse
 )
 
-init_db()
+# Check if the application is running in a test environment
+def is_test_environment():
+    return os.getenv("TEST_ENV", "false").lower() == "true"
+
+if not is_test_environment():
+    init_db()
 
 app = FastAPI(
     title="User Management Service",

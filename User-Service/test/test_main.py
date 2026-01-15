@@ -11,6 +11,8 @@ from datetime import datetime, timezone
 import sys
 import os
 
+os.environ["TEST_ENV"] = "true"
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 from main import app, get_db
