@@ -3,7 +3,7 @@ User Management Microservice
 A FastAPI based user management service with Google OAuth and JWT authentication
 """
 
-from fastapi import FastAPI, HTTPException, Depends, status, Request, Query
+from fastapi import FastAPI, HTTPException, Depends, status, Request, Response, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
@@ -138,18 +138,18 @@ async def readiness():
 # AUTHENTICATION ENDPOINTS
 # ============================================================================
 
-#@app.options("/api/auth/google")
-#async def options_google_auth():
-#    """Handle CORS preflight for Google auth endpoint"""
-#    return JSONResponse(
-#        content={},
-#        headers={
-#            "Access-Control-Allow-Origin": "*",
-#            "Access-Control-Allow-Methods": "POST, OPTIONS",
-#            "Access-Control-Allow-Headers": "*",
-#            "Access-Control-Allow-Credentials": "true",
-#        }
-#    )
+@app.options("/api/auth/google/callback")
+async def options_google_auth():
+    """Handle CORS preflight for Google auth endpoint"""
+    return Response(
+        status_code=204,  
+        headers={
+            "Access-Control-Allow-Origin": Request.headers.get("origin", "*"),
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Credentials": "true",
+        }
+    )
 
 @app.post(
     "/api/auth/google",
