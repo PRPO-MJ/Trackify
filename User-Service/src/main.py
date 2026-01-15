@@ -139,12 +139,12 @@ async def readiness():
 # ============================================================================
 
 @app.options("/api/auth/google/callback")
-async def options_google_auth():
+async def options_google_auth(request: Request):
     """Handle CORS preflight for Google auth endpoint"""
     return Response(
-        status_code=204,  
+        status_code=204,
         headers={
-            "Access-Control-Allow-Origin": Request.headers.get("origin", "*"),
+            "Access-Control-Allow-Origin": request.headers.get("origin", "*"),
             "Access-Control-Allow-Methods": "POST, OPTIONS",
             "Access-Control-Allow-Headers": "*",
             "Access-Control-Allow-Credentials": "true",
