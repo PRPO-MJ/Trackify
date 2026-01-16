@@ -45,7 +45,7 @@ client = TestClient(app)
 def run_init_sql():
     """Run test_init.sql to create the database schema"""
     with engine.connect() as connection:
-        with open(os.path.join(os.path.dirname(__file__), '../Database/mails_test.sql'), 'r') as file:
+        with open(os.path.join(os.path.dirname(__file__), '../../Database/mails_test.sql'), 'r') as file:
             sql_script = file.read()
             connection.execute(text(sql_script))
 
