@@ -10,11 +10,13 @@ from datetime import datetime
 import sys
 import os
 import io
+from sqlalchemy.sql import text
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 from main import app
 from auth import create_access_token
+from database import engine, Base
 
 client = TestClient(app)
 
@@ -79,6 +81,16 @@ def mock_entries_stats():
         "total_hours": 100.0,
         "total_entries": 50
     }
+
+
+# ============================================================================
+# DATABASE SETUP AND TEARDOWN
+# ============================================================================
+
+@pytest.fixture(autouse=True)
+def reset_db():
+    """Mock database reset for PDF-Service (no actual database)"""
+    yield
 
 
 # ============================================================================

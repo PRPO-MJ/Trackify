@@ -12,6 +12,7 @@ from decimal import Decimal
 from uuid import uuid4
 import sys
 import os
+from sqlalchemy.sql import text
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
@@ -41,11 +42,20 @@ app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
 
 
+def run_init_sql():
+    """Run test_init.sql to create the database schema"""
+    with engine.connect() as connection:
+        with open(os.path.join(os.path.dirname(__file__), '../Database/goals_test.sql'), 'r') as file:
+            sql_script = file.read()
+            connection.execute(text(sql_script))
+
+
 @pytest.fixture(autouse=True)
 def reset_db():
     """Reset database before each test"""
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
+    run_init_sql()  
     yield
     Base.metadata.drop_all(bind=engine)
 

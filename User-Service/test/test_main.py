@@ -10,6 +10,7 @@ from unittest.mock import patch, MagicMock
 from datetime import datetime, timezone
 import sys
 import os
+from sqlalchemy.sql import text
 
 os.environ["TEST_ENV"] = "true"
 
@@ -46,8 +47,17 @@ def reset_db():
     """Reset database before each test"""
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
+    run_init_sql()  # Run the init.sql script
     yield
     Base.metadata.drop_all(bind=engine)
+
+
+def run_init_sql():
+    """Run init.sql to create the database schema"""
+    with engine.connect() as connection:
+        with open(os.path.join(os.path.dirname(__file__), '../Database/user_test.sql'), 'r') as file:
+            sql_script = file.read()
+            connection.execute(text(sql_script))
 
 
 @pytest.fixture
